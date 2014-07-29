@@ -1,9 +1,18 @@
+#! ruby -Ku
+# coding: windows-31j
 csv = File.new("out.csv","w")
-csv.write("'ãƒ•ã‚¡ã‚¤ãƒ«å','æ›´æ–°æ™‚åˆ»','ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º(ãƒã‚¤ãƒˆ)'\r\n")
-Dir.glob("/Users/enomoto/Desktop/code/ruby/**/*") do |f|
+csv.write("ƒtƒ@ƒCƒ‹–¼,ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv,ƒTƒCƒY(ƒoƒCƒg),ƒtƒ‹ƒpƒX\n")
+# ƒJƒŒƒ“ƒg‚¶‚á‚È‚­‚Äâ‘ÎƒpƒX‚ğw’è‚µ‚½‚¢ê‡‚ÍHHH
+Dir.glob("**/*") do |f|
   fs = File::Stat.new(f)
-  csv.write("'" + f + "','" + fs.mtime.strftime("%Y/%m/%d %X").to_s + "','" + f.size.to_s + "'\r\n")
-  if /\/*\./ =~ f
-    p f
+  if fs.size == 0
+    print_path = f
+    print_size = ""
+    print_timestamp = ""
+  elsif
+    print_path = f.split("/")[-1]
+    print_size = fs.size.to_s 
+    print_timestamp = fs.mtime.strftime("%Y/%m/%d %X").to_s
   end
+  csv.write(print_path + "," + print_timestamp + "," + print_size  + "," + f + "\n")
 end
