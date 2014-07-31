@@ -1,7 +1,7 @@
 #! ruby -Ku
 # coding: windows-31j
-csv = File.new("out.csv","w")
-csv.write("ファイル名,タイムスタンプ,サイズ(バイト),フルパス\n")
+file = File.new("out.csv","w")
+file.write("ファイル名,タイムスタンプ,サイズ(バイト),フルパス\n")
 # カレントじゃなくて絶対パスを指定したい場合は？？？
 Dir.glob("**/*") do |f|
   fs = File::Stat.new(f)
@@ -14,5 +14,6 @@ Dir.glob("**/*") do |f|
     print_size = fs.size.to_s 
     print_timestamp = fs.mtime.strftime("%Y/%m/%d %X").to_s
   end
-  csv.write(print_path + "," + print_timestamp + "," + print_size  + "," + f + "\n")
+  file.write(print_path + "," + print_timestamp + "," + print_size  + "," + f + "\n")
 end
+file.close
