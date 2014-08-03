@@ -6,14 +6,14 @@ file.write("ファイル名,タイムスタンプ,サイズ(バイト),フルパス\n")
 Dir.glob("**/*") do |f|
   fs = File::Stat.new(f)
   if fs.size == 0
-    print_path = f
-    print_size = ""
-    print_timestamp = ""
+    name = f
+    size = ""
+    timestamp = ""
   elsif
-    print_path = f.split("/")[-1]
-    print_size = fs.size.to_s 
-    print_timestamp = fs.mtime.strftime("%Y/%m/%d %X").to_s
+    name = f.split("/")[-1]
+    size = fs.size.to_s
+    timestamp = fs.mtime.strftime("%Y/%m/%d %X").to_s
   end
-  file.write(print_path + "," + print_timestamp + "," + print_size  + "," + f + "\n")
+  file.write(name + "," + timestamp + "," + size  + "," + f + "\n")
 end
 file.close
