@@ -1,19 +1,29 @@
 #! ruby -Ku
 # coding: windows-31j
-file = File.new("out.csv","w")
-file.write("ファイル名,タイムスタンプ,サイズ(バイト),フルパス\n")
-# カレントじゃなくて絶対パスを指定したい場合は？？？
-Dir.glob("**/*") do |f|
+require 'csv'
+
+files = []
+Dir.glob('**/*') do |f|
   fs = File::Stat.new(f)
   if fs.size == 0
     name = f
-    size = ""
-    timestamp = ""
-  elsif
-    name = f.split("/")[-1]
+    size = ''
+    timestamp = ''
+  else
+    name = f.split('/')[-1]
     size = fs.size.to_s
-    timestamp = fs.mtime.strftime("%Y/%m/%d %X").to_s
+    timestamp = fs.mtime.strftime('%Y/%m/%d %X').to_s
   end
-  file.write(name + "," + timestamp + "," + size  + "," + f + "\n")
+  files << [name, size, timestamp]
 end
-file.close
+
+headers = %w(ファイル名 タイムスタンプ サイズ(バイト) フルパス)
+csv_string = CSV.generate('', write_headers: true, headers: headers) do |csv|
+  files.each do |file|
+    csv << file
+  end
+end
+
+csv = File.new('out.csv', 'w')
+csv.write(csv_string)
+csv.close
